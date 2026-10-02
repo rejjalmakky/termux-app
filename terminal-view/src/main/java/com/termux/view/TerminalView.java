@@ -6,7 +6,11 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
@@ -56,6 +60,53 @@ public final class TerminalView extends View {
     public TerminalRenderer mRenderer;
 
     public TerminalViewClient mClient;
+
+    private Bitmap mBangRmBackground;
+    private final Paint mBangRmBackgroundPaint =
+        new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+
+    private void drawBangRmBackground(Canvas canvas) {
+        if (mBangRmBackground == null) {
+            mBangRmBackground = BitmapFactory.decodeResource(
+                getResources(),
+                R.drawable.bang_rm
+            );
+        }
+
+        if (mBangRmBackground == null || getWidth() <= 0 || getHeight() <= 0) {
+            return;
+        }
+
+        // 15% opacity
+        mBangRmBackgroundPaint.setAlpha(38);
+
+        // Logo sekitar 72% area layar, tetap proporsional
+        float scale = Math.min(
+            (getWidth() * 0.72f) / mBangRmBackground.getWidth(),
+            (getHeight() * 0.72f) / mBangRmBackground.getHeight()
+        );
+
+        float width = mBangRmBackground.getWidth() * scale;
+        float height = mBangRmBackground.getHeight() * scale;
+
+        // Posisi tengah
+        float left = (getWidth() - width) / 2f;
+        float top = (getHeight() - height) / 2f;
+
+        RectF destination = new RectF(
+            left,
+            top,
+            left + width,
+            top + height
+        );
+
+        canvas.drawBitmap(
+            mBangRmBackground,
+            null,
+            destination,
+            mBangRmBackgroundPaint
+        );
+    }
 
     private TextSelectionCursorController mTextSelectionCursorController;
 
@@ -1020,8 +1071,11 @@ public final class TerminalView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.drawColor(0XFF000000);
+        drawBangRmBackground(canvas);
+
         if (mEmulator == null) {
-            canvas.drawColor(0XFF000000);
+            return;
         } else {
             // render the terminal view and highlight any selected text
             int[] sel = mDefaultSelectors;
