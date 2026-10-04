@@ -38,6 +38,10 @@ public class TermuxShellCommandShellEnvironment extends ShellCommandShellEnviron
                 String.valueOf(preferences.getAndIncrementTerminalSessionNumberSinceBoot()));
             ShellEnvironmentUtils.putToEnvIfSet(environment, ENV_SHELL_CMD__TERMINAL_SESSION_NUMBER_SINCE_APP_START,
                 String.valueOf(TermuxShellManager.getAndIncrementTerminalSessionNumberSinceAppStart()));
+
+            // BANG RM: branded default terminal prompt.
+            environment.put("PS1", "\u001B[1;31m[RM]\u001B[0m ~ $ ");
+
         } else {
             return environment;
         }
