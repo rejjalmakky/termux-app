@@ -563,8 +563,28 @@ public final class TerminalView extends View {
      *
      * @param textSize the new font size, in density-independent pixels.
      */
+    // BANG RM: bundled JetBrains Mono font.
+    private Typeface mBangRmTypeface;
+
+    private Typeface getBangRmTypeface() {
+        if (mBangRmTypeface == null) {
+            try {
+                mBangRmTypeface = Typeface.createFromAsset(
+                    getContext().getAssets(),
+                    "fonts/JetBrainsMono-Regular.ttf"
+                );
+            } catch (RuntimeException e) {
+                mBangRmTypeface = Typeface.MONOSPACE;
+            }
+        }
+        return mBangRmTypeface;
+    }
+
     public void setTextSize(int textSize) {
-        mRenderer = new TerminalRenderer(textSize, mRenderer == null ? Typeface.MONOSPACE : mRenderer.mTypeface);
+        mRenderer = new TerminalRenderer(
+            textSize,
+            mRenderer == null ? getBangRmTypeface() : mRenderer.mTypeface
+        );
         updateSize();
     }
 
