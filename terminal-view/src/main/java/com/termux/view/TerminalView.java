@@ -77,13 +77,13 @@ public final class TerminalView extends View {
             return;
         }
 
-        // 15% opacity
-        mBangRmBackgroundPaint.setAlpha(38);
+        // 40% opacity
+        mBangRmBackgroundPaint.setAlpha(102);
 
-        // Logo sekitar 72% area layar, tetap proporsional
+        // Logo 100% area layar, tetap proporsional
         float scale = Math.min(
-            (getWidth() * 0.72f) / mBangRmBackground.getWidth(),
-            (getHeight() * 0.72f) / mBangRmBackground.getHeight()
+            (getWidth() * 1.0f) / mBangRmBackground.getWidth(),
+            (getHeight() * 1.0f) / mBangRmBackground.getHeight()
         );
 
         float width = mBangRmBackground.getWidth() * scale;
