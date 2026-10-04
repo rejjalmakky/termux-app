@@ -41,6 +41,7 @@ android {
     }
 
     defaultConfig {
+        applicationId "com.bangrm.termux"
         minSdkVersion project.properties.minSdkVersion.toInteger()
         targetSdkVersion project.properties.targetSdkVersion.toInteger()
         versionCode 118
@@ -51,8 +52,8 @@ android {
 
         buildConfigField "String", "TERMUX_PACKAGE_VARIANT", "\"" + project.ext.packageVariant + "\"" // Used by TermuxApplication class
 
-        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
-        manifestPlaceholders.TERMUX_APP_NAME = "Termux"
+        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.bangrm.termux"
+        manifestPlaceholders.TERMUX_APP_NAME = "Bang RM"
         manifestPlaceholders.TERMUX_API_APP_NAME = "Termux:API"
         manifestPlaceholders.TERMUX_BOOT_APP_NAME = "Termux:Boot"
         manifestPlaceholders.TERMUX_FLOAT_APP_NAME = "Termux:Float"
@@ -165,6 +166,16 @@ def validateVersionName(String versionName) {
 }
 
 def downloadBootstrap(String arch, String expectedChecksum, String version) {
+    // BANG RM: use the verified custom ARM64 bootstrap.
+    if (arch == "aarch64") {
+        def bangRmBootstrap = new File(projectDir, "src/main/cpp/bootstrap-aarch64.zip")
+        if (bangRmBootstrap.exists()) {
+            logger.quiet("BANG RM: using custom aarch64 bootstrap: " + bangRmBootstrap)
+            return
+        }
+        throw new GradleException("BANG RM custom aarch64 bootstrap is missing: " + bangRmBootstrap)
+    }
+
     def digest = java.security.MessageDigest.getInstance("SHA-256")
 
     def localUrl = "src/main/cpp/bootstrap-" + arch + ".zip"
