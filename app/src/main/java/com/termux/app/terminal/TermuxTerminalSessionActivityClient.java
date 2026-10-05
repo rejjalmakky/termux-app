@@ -309,7 +309,7 @@ public class TermuxTerminalSessionActivityClient extends TermuxTerminalSessionCl
 
         if (!mActivity.getProperties().areTerminalSessionChangeToastsDisabled()) {
             TerminalSession session = mActivity.getCurrentSession();
-            mActivity.showToast(toToastTitle(session), false);
+            mActivity.showToast("Hallo bang RM", false);
         }
     }
 
